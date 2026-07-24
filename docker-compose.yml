@@ -9,7 +9,7 @@ services:
       MYSQL_USER: customer_user
       MYSQL_PASSWORD: customer_pass
     ports:
-      - "3307:3307"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./src/main/resources/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
