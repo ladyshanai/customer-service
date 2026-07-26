@@ -2,6 +2,10 @@ spring:
   application:
     name: customer-service
 
+logging:
+  level:
+    com.customer.service.client.ProductClient: DEBUG
+
 ---
 spring:
   config:

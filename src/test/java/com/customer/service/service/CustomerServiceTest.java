@@ -6,6 +6,7 @@ import com.customer.service.dto.CustomerDetailResponse;
 import com.customer.service.dto.CustomerRequest;
 import com.customer.service.dto.CustomerResponse;
 import com.customer.service.entity.CustomerEntity;
+import com.customer.service.exception.DatabaseOperationException;
 import com.customer.service.exception.DuplicateCustomerException;
 import com.customer.service.exception.ExternalServiceException;
 import com.customer.service.exception.InvalidCustomerIdException;
@@ -142,6 +143,35 @@ class CustomerServiceTest {
     }
 
     @Test
+    void getCustomerByIdShouldReturnEmptyProductsWhenProductServiceReturnsNull() {
+        var customerId = 1L;
+        var entity = buildCustomerEntity(customerId);
+        var detailResponse = new CustomerDetailResponse(
+                customerId,
+                "Ana",
+                "Lopez",
+                "12345678",
+                "Calle 123",
+                "1111-1111",
+                "ana@mail.com",
+                "PERSON",
+                true,
+                BigDecimal.valueOf(500),
+                List.of()
+        );
+
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(entity));
+        when(productClient.getProductsByCustomer(customerId)).thenReturn(null);
+        when(customerMapper.toDetailResponse(entity, List.of())).thenReturn(detailResponse);
+
+        var result = customerService.getCustomerById(customerId);
+
+        assertNotNull(result.products());
+        assertTrue(result.products().isEmpty());
+        verify(customerMapper).toDetailResponse(entity, List.of());
+    }
+
+    @Test
     void getCustomerByIdShouldThrowInvalidCustomerIdExceptionWhenIdIsNotPositive() {
         assertThrows(
                 InvalidCustomerIdException.class,
@@ -172,7 +202,7 @@ class CustomerServiceTest {
                 () -> customerService.getCustomerById(customerId)
         );
 
-        assertTrue(exception.getMessage().contains("Error while fetching customer products"));
+        assertTrue(exception.getMessage().contains("Unable to communicate with product service"));
     }
 
     @Test
@@ -187,11 +217,11 @@ class CustomerServiceTest {
     }
 
     @Test
-    void getAllCustomersShouldWrapDataAccessExceptionAsExternalServiceException() {
+    void getAllCustomersShouldWrapDataAccessExceptionAsDatabaseOperationException() {
         when(customerRepository.findAll()).thenThrow(new DataAccessResourceFailureException("db down"));
 
         var exception = assertThrows(
-                ExternalServiceException.class,
+                DatabaseOperationException.class,
                 () -> customerService.getAllCustomers()
         );
 
@@ -217,14 +247,14 @@ class CustomerServiceTest {
     }
 
     @Test
-    void deleteCustomerShouldWrapDataAccessExceptionAsExternalServiceException() {
+    void deleteCustomerShouldWrapDataAccessExceptionAsDatabaseOperationException() {
         var customerId = 8L;
         var entity = buildCustomerEntity(customerId);
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(entity));
         doThrow(new DataAccessResourceFailureException("db down")).when(customerRepository).delete(any(CustomerEntity.class));
 
         var exception = assertThrows(
-                ExternalServiceException.class,
+                DatabaseOperationException.class,
                 () -> customerService.deleteCustomer(customerId)
         );
 
