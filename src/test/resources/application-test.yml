@@ -10,3 +10,9 @@ eureka:
     enabled: false
     register-with-eureka: false
     fetch-registry: false
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
