@@ -28,7 +28,7 @@ Microservicio REST para gestión de clientes (alta, baja, modificación y consul
           |                                  |
 +---------v--------+              +----------v---------+
 | Product Service  |              | Customer Service   |
-|      :8080       |<-------------|  Feign Client      |
+|      :8080       |<-------------| :8081 Feign Client |
 +------------------+              +--------------------+
 ```
 
@@ -58,7 +58,7 @@ docker compose up -d
 mvn spring-boot:run
 ```
 
-La API queda disponible en `http://localhost:8080`.
+La API queda disponible en `http://localhost:8081`.
 
 ## 📖 Configuración (Config Server)
 
@@ -78,14 +78,14 @@ El proyecto incluye `spring-cloud-starter-netflix-eureka-client`, por lo que esp
 
 ## 📄 Swagger
 
-- UI: `http://localhost:8080/swagger-ui/index.html`
-- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+- UI: `http://localhost:8081/swagger-ui/index.html`
+- OpenAPI JSON: `http://localhost:8081/v3/api-docs`
 
 ## 🧪 Ejemplos con cURL
 
 ```bash
 # 1) Crear cliente
-curl --location 'http://localhost:8080/api/v1/customers' \
+curl --location 'http://localhost:8081/api/v1/customers' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "firstName": "Juan",
@@ -99,13 +99,13 @@ curl --location 'http://localhost:8080/api/v1/customers' \
 }'
 
 # 2) Listar clientes
-curl --location 'http://localhost:8080/api/v1/customers'
+curl --location 'http://localhost:8081/api/v1/customers'
 
 # 3) Obtener cliente por ID
-curl --location 'http://localhost:8080/api/v1/customers/1'
+curl --location 'http://localhost:8081/api/v1/customers/1'
 
 # 4) Actualizar cliente
-curl --location --request PUT 'http://localhost:8080/api/v1/customers/1' \
+curl --location --request PUT 'http://localhost:8081/api/v1/customers/1' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "firstName": "Juan Carlos",
@@ -119,7 +119,7 @@ curl --location --request PUT 'http://localhost:8080/api/v1/customers/1' \
 }'
 
 # 5) Eliminar cliente
-curl --location --request DELETE 'http://localhost:8080/api/v1/customers/1'
+curl --location --request DELETE 'http://localhost:8081/api/v1/customers/1'
 ```
 
 ## 📮 Colección de Postman
@@ -130,5 +130,5 @@ Podés generar la colección de dos formas:
 2. Importar el OpenAPI:
 
 ```bash
-curl --location 'http://localhost:8080/v3/api-docs' --output customer-service-openapi.json
+curl --location 'http://localhost:8081/v3/api-docs' --output customer-service-openapi.json
 ```
