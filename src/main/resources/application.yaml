@@ -1,5 +1,10 @@
 spring:
   application:
     name: customer-service
+
+---
+spring:
   config:
+    activate:
+      on-profile: "!test"
     import: configserver:http://localhost:8888
