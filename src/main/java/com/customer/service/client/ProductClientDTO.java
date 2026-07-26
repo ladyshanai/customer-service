@@ -1,6 +1,7 @@
 package com.customer.service.client;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public record ProductClientDTO(
         Long id,
@@ -8,7 +9,9 @@ public record ProductClientDTO(
         String productType,
         String productNumber,
         BigDecimal balance,
-        Boolean active
+        Boolean active,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 
 ) {
 }
