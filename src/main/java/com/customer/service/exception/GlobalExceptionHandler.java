@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
         var status = HttpStatus.NOT_FOUND;
         var body = buildErrorResponse(status, ex.getMessage(), request);
-        log.info("Handled exception status={} method={} path={} message={}",
+        log.info("Handled ResourceNotFoundException status={} method={} path={} message={}",
                 status.value(), request.getMethod(), request.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleConflict(DuplicateCustomerException ex, HttpServletRequest request) {
         var status = HttpStatus.CONFLICT;
         var body = buildErrorResponse(status, ex.getMessage(), request);
-        log.info("Handled exception status={} method={} path={} message={}",
+        log.info("Handled DuplicateCustomerException status={} method={} path={} message={}",
                 status.value(), request.getMethod(), request.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleExternalService(ExternalServiceException ex, HttpServletRequest request) {
         var status = HttpStatus.SERVICE_UNAVAILABLE;
         var body = buildErrorResponse(status, ex.getMessage(), request);
-        log.warn("Handled external service exception status={} method={} path={} message={}",
+        log.warn("Handled ExternalServiceException status={} method={} path={} message={}",
                 status.value(), request.getMethod(), request.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(body);
     }
