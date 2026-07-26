@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
         var status = HttpStatus.SERVICE_UNAVAILABLE;
         var body = buildErrorResponse(status, ex.getMessage(), request);
         log.warn("Handled external service exception status={} method={} path={} message={}",
-                status.value(), request.getMethod(), request.getRequestURI(), ex.getMessage(), ex);
+                status.value(), request.getMethod(), request.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(body);
     }
 
